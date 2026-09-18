@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TypeSafe Playground
 
-## Getting Started
+A web app for evaluating text against structured questions using the [TypeSafe AI](https://typesafe.ai) API. Built with Next.js 16, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+## What it does
+
+TypeSafe lets you define questions with typed answer formats — yes/no (`noul`), categorical (`choice`), or ordinal (`score`) — and get structured, scored results from an LLM in a single API call. This playground gives you a UI to experiment with those capabilities.
+
+Two modes:
+
+- **Playground** (`/`) — define any state text and build custom questions dynamically. Good for testing TypeSafe on arbitrary use cases.
+- **Stock Signal Analyzer** (`/analyze`) — paste financial news or earnings reports and get sentiment, materiality, urgency, sector impact, and suggested action in one call. Includes ticker presets for HK and US stocks.
+
+Results are persisted to a local SQLite database so you can browse and restore previous evaluations.
+
+## Question types
+
+| Type | What it returns | Example |
+|------|----------------|---------|
+| **noul** | 0.0–1.0 probability (yes/no) | "This text is urgent" → 0.87 |
+| **choice** | Category label + confidence + per-class probabilities | Sentiment → "bearish" (72%) |
+| **score** | Ordinal score + legend + probabilities | Urgency → 2.4 ("High — needs attention") |
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+
+- pnpm (or npm/yarn)
+- A TypeSafe API key
+
+### Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create `.env.local` in the project root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+TYPESAFE_API_KEY=your-api-key-here
+```
 
-## Learn More
+### Run
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API routes
 
-## Deploy on Vercel
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/evaluate` | Evaluate arbitrary state + questions |
+| GET | `/api/history` | Last 50 queries (all types) |
+| POST | `/api/analyze` | Analyze financial news with preset questions |
+| GET | `/api/analyze/history` | Last 50 stock analyses |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Next.js](https://nextjs.org) 16 (App Router)
+- [TypeSafe AI SDK](https://www.npmjs.com/package/@typesafe-ai/sdk) 0.6
+- [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) for local persistence
+- [Tailwind CSS](https://tailwindcss.com) 4
+
+## Sample queries
+
+See [SAMPLE-QUERIES.md](./SAMPLE-QUERIES.md) for 10 ready-to-use evaluation examples covering stock signals, sentiment analysis, spam detection, contract review, and more.
+
+## License
+
+Private — not published.
