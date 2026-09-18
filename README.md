@@ -73,4 +73,4 @@ See [SAMPLE-QUERIES.md](./SAMPLE-QUERIES.md) for 10 ready-to-use evaluation exam
 
 ## License
 
-Private — not published.
+Open source under the MIT License.
