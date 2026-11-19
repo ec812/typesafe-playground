@@ -82,8 +82,8 @@ export async function POST(request: Request) {
       questions: JSON.stringify(questions),
       model: response.model,
       response: JSON.stringify(response),
-      input_tokens: response.usage.input_tokens,
-      output_tokens: response.usage.output_tokens,
+      input_tokens: response.usage.input_tokens ?? undefined,
+      output_tokens: response.usage.output_tokens ?? undefined,
       duration_ms,
     });
 
